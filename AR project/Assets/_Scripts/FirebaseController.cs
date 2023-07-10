@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Firebase;
+using Firebase.Auth;
+using System;
+using System.Threading.Tasks;
 
 public class NewBehaviourScript : MonoBehaviour
 {
@@ -9,7 +13,25 @@ public class NewBehaviourScript : MonoBehaviour
     public InputField loginEmail,loginPassword,singupEmail,signupPassword,signupCPassword,forgetPassEmail;
     public Text notif_Text,notif_Message;
     public Toggle remeber;
-    
+    Firebase.Auth.FirebaseAuth auth;
+    Firebase.Auth.FirebaseUser user;
+    void Start(){
+        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+        var dependencyStatus = task.Result;
+        if (dependencyStatus == Firebase.DependencyStatus.Available) {
+            // Create and hold a reference to your FirebaseApp,
+            // where app is a Firebase.FirebaseApp property of your application class.
+            // app = Firebase.FirebaseApp.DefaultInstance;
+            InitializeFirebase();
+
+            // Set a flag here to indicate whether Firebase is ready to use by your app.
+        } else {
+            UnityEngine.Debug.LogError(System.String.Format(
+            "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
+            // Firebase Unity SDK is not safe to use here.
+        }
+});
+    }
 
     //Screen object variables
     public void OpenLoginPanel()
@@ -33,6 +55,13 @@ public class NewBehaviourScript : MonoBehaviour
         forgetPasswordPanel.SetActive(true);
         aRpanel.SetActive(false);
     }
+    public void OpenAR()
+    {
+        loginPanel.SetActive(false);
+        signupPanel.SetActive(false);
+        forgetPasswordPanel.SetActive(false);
+        aRpanel.SetActive(true);
+    }
     
     public void LoginUser()
     {
@@ -42,9 +71,11 @@ public class NewBehaviourScript : MonoBehaviour
         return;
         }
         else{
-            aRpanel.SetActive(true);
-            loginPanel.SetActive(false);
+            SignInUser(loginEmail.text,loginPassword.text);
+            OpenAR();
         }
+        
+        
     }
     public void SignUpUser()
     {
@@ -53,6 +84,9 @@ public class NewBehaviourScript : MonoBehaviour
             showNotifcationMessage("Error","Fileds Empty");
             return;
         }
+        CreateUser(singupEmail.text,signupPassword.text);
+
+
     }
     public void forgetPass()
     {
@@ -75,8 +109,70 @@ public class NewBehaviourScript : MonoBehaviour
         notificationPanel.SetActive(false);
 
     }
+    void CreateUser(string email, string password){
+        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+            if (task.IsCanceled) {
+                Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted) {
+                Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            // Firebase user has been created.
+            Firebase.Auth.AuthResult result = task.Result;
+            Debug.LogFormat("Firebase user created successfully: {0} ({1})",
+                result.User.DisplayName, result.User.UserId);
+            });
+    }
+    public void SignInUser(string email,string password)
+    {
+        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+            if (task.IsCanceled) {
+                Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                return;
+            }
+            if (task.IsFaulted) {
+                Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                return;
+            }
+
+            Firebase.Auth.AuthResult result = task.Result;
+            Debug.LogFormat("User signed in successfully: {0} ({1})",
+                result.User.DisplayName, result.User.UserId);
+            
+            });
+    }
+    void InitializeFirebase() {
+        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        auth.StateChanged += AuthStateChanged;
+        AuthStateChanged(this, null);
+    }
+
+    void AuthStateChanged(object sender, System.EventArgs eventArgs) {
+        if (auth.CurrentUser != user) {
+            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null
+                && auth.CurrentUser.IsValid();
+            if (!signedIn && user != null) {
+            Debug.Log("Signed out " + user.UserId);
+            }
+            user = auth.CurrentUser;
+            if (signedIn) {
+            Debug.Log("Signed in " + user.UserId);
+            
+            }
+        }
+    }
+
+    void OnDestroy() {
+        auth.StateChanged -= AuthStateChanged;
+        auth = null;
+    }
 
     
 }
+
+
 
 
