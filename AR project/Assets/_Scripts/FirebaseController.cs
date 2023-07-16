@@ -6,15 +6,17 @@ using Firebase;
 using Firebase.Auth;
 using System;
 using System.Threading.Tasks;
+using Firebase.Extensions;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    public GameObject loginPanel,signupPanel,forgetPasswordPanel,notificationPanel,aRpanel;
+    public GameObject loginPanel,signupPanel,forgetPasswordPanel,notificationPanel,aRpanel,successtext;
     public InputField loginEmail,loginPassword,singupEmail,signupPassword,signupCPassword,forgetPassEmail;
     public Text notif_Text,notif_Message;
     public Toggle remeber;
     Firebase.Auth.FirebaseAuth auth;
     Firebase.Auth.FirebaseUser user;
+    bool isSignIn = false;
     void Start(){
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
         var dependencyStatus = task.Result;
@@ -40,6 +42,7 @@ public class NewBehaviourScript : MonoBehaviour
         signupPanel.SetActive(false);
         forgetPasswordPanel.SetActive(false);
         aRpanel.SetActive(false);
+        successtext.SetActive(false);
     }
     public void OpenSignUpPanel()
     {
@@ -62,6 +65,10 @@ public class NewBehaviourScript : MonoBehaviour
         forgetPasswordPanel.SetActive(false);
         aRpanel.SetActive(true);
     }
+    public void RegisSuc()
+    {
+        successtext.SetActive(true);
+    }
     
     public void LoginUser()
     {
@@ -70,11 +77,8 @@ public class NewBehaviourScript : MonoBehaviour
             showNotifcationMessage("Error","Fields Empty");
         return;
         }
-        else{
-            SignInUser(loginEmail.text,loginPassword.text);
-            OpenAR();
-        }
         
+        SignInUser(loginEmail.text,loginPassword.text);
         
     }
     public void SignUpUser()
@@ -85,8 +89,13 @@ public class NewBehaviourScript : MonoBehaviour
             return;
         }
         CreateUser(singupEmail.text,signupPassword.text);
+        RegisSuc();
 
 
+    }
+    public void LogOut(){
+        auth.SignOut();
+        OpenLoginPanel();
     }
     public void forgetPass()
     {
@@ -110,7 +119,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     }
     void CreateUser(string email, string password){
-        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+        auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task => {
             if (task.IsCanceled) {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
                 return;
@@ -128,7 +137,7 @@ public class NewBehaviourScript : MonoBehaviour
     }
     public void SignInUser(string email,string password)
     {
-        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
+        auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task => {
             if (task.IsCanceled) {
                 Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
                 return;
@@ -141,7 +150,7 @@ public class NewBehaviourScript : MonoBehaviour
             Firebase.Auth.AuthResult result = task.Result;
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 result.User.DisplayName, result.User.UserId);
-            
+            OpenAR();
             });
     }
     void InitializeFirebase() {
@@ -160,6 +169,7 @@ public class NewBehaviourScript : MonoBehaviour
             user = auth.CurrentUser;
             if (signedIn) {
             Debug.Log("Signed in " + user.UserId);
+            isSignIn=true;
             
             }
         }
@@ -168,6 +178,19 @@ public class NewBehaviourScript : MonoBehaviour
     void OnDestroy() {
         auth.StateChanged -= AuthStateChanged;
         auth = null;
+    }
+
+    bool isSigned=false;
+    void Update()
+    {
+        if(isSignIn)
+        {
+            if(!isSigned)
+            {
+                isSigned=true;
+                OpenAR();
+            }
+        }
     }
 
     
