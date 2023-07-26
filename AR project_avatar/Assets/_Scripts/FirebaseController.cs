@@ -10,8 +10,8 @@ using Firebase.Extensions;
 
 public class NewBehaviourScript : MonoBehaviour
 {
-    public GameObject loginPanel,signupPanel,forgetPasswordPanel,notificationPanel,aRpanel,successtext,homePanel;
-    public InputField loginEmail,loginPassword,singupEmail,signupPassword,signupCPassword,forgetPassEmail;
+    public GameObject loginPanel,signupPanel,forgetPasswordPanel,notificationPanel,aRpanel,homePanel,demoPanel;
+    public InputField loginEmail,loginPassword,singupEmail,signupPassword,forgetPassEmail;
     public Text notif_Text,notif_Message;
     public Toggle remeber;
     Firebase.Auth.FirebaseAuth auth;
@@ -44,7 +44,16 @@ public class NewBehaviourScript : MonoBehaviour
         signupPanel.SetActive(false);
         forgetPasswordPanel.SetActive(false);
         aRpanel.SetActive(false);
-        successtext.SetActive(false);
+        // successtext.SetActive(false);
+    }
+    public void OpenDemoPanel()
+    {
+        loginPanel.SetActive(false);
+        homePanel.SetActive(false);
+        signupPanel.SetActive(false);
+        forgetPasswordPanel.SetActive(false);
+        demoPanel.SetActive(true);
+        aRpanel.SetActive(false);
     }
     public void OpenSignUpPanel()
     {
@@ -69,6 +78,7 @@ public class NewBehaviourScript : MonoBehaviour
         signupPanel.SetActive(false);
         forgetPasswordPanel.SetActive(false);
         aRpanel.SetActive(true);
+        demoPanel.SetActive(false);
     }
     public void OpenHome()
     {
@@ -78,11 +88,7 @@ public class NewBehaviourScript : MonoBehaviour
         forgetPasswordPanel.SetActive(false);
         aRpanel.SetActive(false);
     }
-    public void RegisSuc()
-    {
-        successtext.SetActive(true);
-    }
-    
+   
     public void LoginUser()
     {
         if(string.IsNullOrEmpty(loginEmail.text)&&string.IsNullOrEmpty(loginPassword.text))
@@ -96,19 +102,24 @@ public class NewBehaviourScript : MonoBehaviour
     }
     public void SignUpUser()
     {
-        if (string.IsNullOrEmpty(singupEmail.text)&&string.IsNullOrEmpty(signupPassword.text)&&string.IsNullOrEmpty(signupCPassword.text))
+        if (string.IsNullOrEmpty(singupEmail.text)&&string.IsNullOrEmpty(signupPassword.text))
         {
             showNotifcationMessage("Error","Fileds Empty");
             return;
         }
         CreateUser(singupEmail.text,signupPassword.text);
-        RegisSuc();
 
 
     }
     public void LogOut(){
         auth.SignOut();
         OpenHome();
+    }
+    public void Showdemo(){
+        OpenDemoPanel();
+    }
+    public void Backfromdemo(){
+        OpenAR();
     }
     public void forgetPass()
     {
@@ -118,6 +129,7 @@ public class NewBehaviourScript : MonoBehaviour
 
             return;
         }
+        forgetPasswordSubmit(forgetPassEmail.text);
     }
     private void showNotifcationMessage(string title,string message)
     {
@@ -139,6 +151,15 @@ public class NewBehaviourScript : MonoBehaviour
             }
             if (task.IsFaulted) {
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        showNotifcationMessage("Error",GetErrorMessage(errorCode));
+                    }
+                }
                 return;
             }
 
@@ -157,6 +178,15 @@ public class NewBehaviourScript : MonoBehaviour
             }
             if (task.IsFaulted) {
                 Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+                foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        showNotifcationMessage("Error",GetErrorMessage(errorCode));
+                    }
+                }
                 return;
             }
 
@@ -205,9 +235,68 @@ public class NewBehaviourScript : MonoBehaviour
             }
         }
     }
+ private static string GetErrorMessage(AuthError errorCode)
+    {
+        var message = "";
+        switch (errorCode)
+        {
+            case AuthError.AccountExistsWithDifferentCredentials:
+                message = "Account Not Exist";
+                break;
+            case AuthError.MissingPassword:
+                message = "Missing Password";
+                break;
+            case AuthError.WeakPassword:
+                message = "Password So Weak";
+                break;
+            case AuthError.WrongPassword:
+                message = "Wrong Password";
+                break;
+            case AuthError.EmailAlreadyInUse:
+                message = "Your Email Already in Use";
+                break;
+            case AuthError.InvalidEmail:
+                message = "Your Email Invalid";
+                break;
+            case AuthError.MissingEmail:
+                message = "Your Email Missing";
+                break;
+            default:
+                message = "Invalid Error";
+                break;
+        }
+        return message;
+    }
+
+    void forgetPasswordSubmit(string forgetPasswordEmail)
+    {
+        auth.SendPasswordResetEmailAsync(forgetPasswordEmail).ContinueWithOnMainThread(task=>{
+
+            if(task.IsCanceled){
+                Debug.LogError("SendPasswordResetEmailAsync was canceled");
+            }
+            if(task.IsFaulted)
+            {
+                foreach (Exception exception in task.Exception.Flatten().InnerExceptions)
+                {
+                    Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+                    if (firebaseEx != null)
+                    {
+                        var errorCode = (AuthError)firebaseEx.ErrorCode;
+                        showNotifcationMessage("Error",GetErrorMessage(errorCode));
+                    }
+                }
+            }
+            showNotifcationMessage("Alert","Successfully Send Email for Reset Password");
+
+        }
+        );
+    }
 
     
 }
+    
+
 
 
 

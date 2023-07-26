@@ -503,7 +503,7 @@ PlayerSettings:
   enableCrashReportAPI: 0
   cameraUsageDescription: Required For AR.
   locationUsageDescription: 
-  microphoneUsageDescription: 
+  microphoneUsageDescription: use microphone
   bluetoothUsageDescription: 
   macOSTargetOSVersion: 10.13.0
   switchNMETAOverride: 

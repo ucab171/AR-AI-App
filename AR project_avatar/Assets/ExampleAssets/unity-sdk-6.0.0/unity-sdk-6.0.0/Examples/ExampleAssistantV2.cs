@@ -51,6 +51,8 @@ namespace IBM.Watson.Examples
         public UnityEngine.UI.Text ResponseText;
         [Tooltip("Text field to display the input.")]
         public UnityEngine.UI.InputField UserInput;
+        [Tooltip("Button to submit the input.")]
+        public GameObject SubmitButton;
         #endregion
 
         private AssistantService service;
@@ -74,17 +76,19 @@ namespace IBM.Watson.Examples
             LogSystem.InstallDefaultReactors();
             Runnable.Run(CreateService());
             chatStatus = ProcessingStatus.Idle;
+            Button button = SubmitButton.GetComponent<Button>();
+            button.onClick.AddListener(() => GetChatResponse(UserInput.text));
         }
 
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Return))
-            {
-                string pattern = @" \([^)]*\)";
-                string result = Regex.Replace(UserInput.text.ToString(), pattern, "");
-                result = result.Replace("\t", "").Replace("\n", "").Replace("\r", "");
-                GetChatResponse(result);
-            }
+            // if(Input.GetKeyDown(KeyCode.Return))
+            // {
+            //     string pattern = @" \([^)]*\)";
+            //     string result = Regex.Replace(UserInput.text.ToString(), pattern, "");
+            //     result = result.Replace("\t", "").Replace("\n", "").Replace("\r", "");
+            //     GetChatResponse(result);
+            // }
             
             if (ResponseText != null && Response != null)
             {
