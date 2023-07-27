@@ -53,6 +53,7 @@ namespace IBM.Watson.Examples
         public UnityEngine.UI.InputField UserInput;
         [Tooltip("Button to submit the input.")]
         public GameObject SubmitButton;
+        public UnityEngine.UI.Button NoButton;
         #endregion
 
         private AssistantService service;
@@ -78,6 +79,8 @@ namespace IBM.Watson.Examples
             chatStatus = ProcessingStatus.Idle;
             Button button = SubmitButton.GetComponent<Button>();
             button.onClick.AddListener(() => GetChatResponse(UserInput.text));
+
+            NoButton.onClick.AddListener(ChangeText);
         }
 
         private void Update()
@@ -94,6 +97,12 @@ namespace IBM.Watson.Examples
             {
                 ResponseText.text = Response;
             }
+        }
+
+        public void ChangeText()
+        {
+            UserInput.text = "Cancel";
+            GetChatResponse(UserInput.text);
         }
 
         private IEnumerator CreateService()

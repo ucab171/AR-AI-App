@@ -7,6 +7,8 @@ public class DemoVideo : MonoBehaviour
     [SerializeField]
     private UnityEngine.UI.Text Response;
     [SerializeField]
+    private UnityEngine.UI.InputField Input;
+    [SerializeField]
     private UnityEngine.UI.Button YesButton;
     [SerializeField]
     private UnityEngine.UI.Button NoButton;
@@ -35,5 +37,12 @@ public class DemoVideo : MonoBehaviour
             NoButton.gameObject.SetActive(false);
             Ask.gameObject.SetActive(false);
         }
+    }
+
+    public void HideButton()
+    {
+        NoButton.gameObject.SetActive(false);
+        YesButton.gameObject.SetActive(false);
+        Ask.gameObject.SetActive(false);
     }
 }
