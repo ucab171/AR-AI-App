@@ -21,21 +21,15 @@ public class NewBehaviourScript : MonoBehaviour
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
         var dependencyStatus = task.Result;
         if (dependencyStatus == Firebase.DependencyStatus.Available) {
-            // Create and hold a reference to your FirebaseApp,
-            // where app is a Firebase.FirebaseApp property of your application class.
-            // app = Firebase.FirebaseApp.DefaultInstance;
             InitializeFirebase();
-
-            // Set a flag here to indicate whether Firebase is ready to use by your app.
         } else {
             UnityEngine.Debug.LogError(System.String.Format(
             "Could not resolve all Firebase dependencies: {0}", dependencyStatus));
-            // Firebase Unity SDK is not safe to use here.
         }
 });
     }
 
-    //Screen object variables
+
     public void OpenLoginPanel()
     {
 
@@ -44,7 +38,6 @@ public class NewBehaviourScript : MonoBehaviour
         signupPanel.SetActive(false);
         forgetPasswordPanel.SetActive(false);
         aRpanel.SetActive(false);
-        // successtext.SetActive(false);
     }
     public void OpenDemoPanel()
     {
@@ -87,8 +80,7 @@ public class NewBehaviourScript : MonoBehaviour
         signupPanel.SetActive(false);
         forgetPasswordPanel.SetActive(false);
         aRpanel.SetActive(false);
-    }
-   
+    }   
     public void LoginUser()
     {
         if(string.IsNullOrEmpty(loginEmail.text)&&string.IsNullOrEmpty(loginPassword.text))
@@ -96,9 +88,7 @@ public class NewBehaviourScript : MonoBehaviour
             showNotifcationMessage("Error","Fields Empty");
         return;
         }
-        
         SignInUser(loginEmail.text,loginPassword.text);
-        
     }
     public void SignUpUser()
     {
@@ -108,8 +98,6 @@ public class NewBehaviourScript : MonoBehaviour
             return;
         }
         CreateUser(singupEmail.text,signupPassword.text);
-
-
     }
     public void LogOut(){
         auth.SignOut();
