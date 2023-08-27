@@ -1,0 +1,74 @@
+{
+    "name": "player",
+    "maps": [
+        {
+            "name": "PlayerMain",
+            "id": "0a9dc68b-c5c9-47bc-9d6d-635c97969c28",
+            "actions": [
+                {
+                    "name": "move",
+                    "type": "Value",
+                    "id": "3b427151-d0df-4024-9dfb-0611ea73e321",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "jump",
+                    "type": "Button",
+                    "id": "a4cb97ff-b086-4ec5-9d0c-df2df955ec03",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "look",
+                    "type": "Value",
+                    "id": "96007a02-62f3-4476-a752-5e44b5b5b767",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f38e95b5-112e-40d3-807e-66212a1a3cba",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "834c875d-02ce-4643-8f62-5beafe7218f5",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "984f8855-a2e5-42ff-83eb-d6d8b8237e7d",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

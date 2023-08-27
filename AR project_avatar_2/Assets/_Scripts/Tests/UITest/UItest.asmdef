@@ -1,0 +1,25 @@
+{
+    "name": "UItest",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:23f3c6063e13e4fd9addce3606ff4e42",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:b449da7f36ca848d996980b176dec804"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Firebase.Auth.dll",
+        "nunit.framework.dll",
+        "NSubstitute.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

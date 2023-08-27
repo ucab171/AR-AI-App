@@ -1,0 +1,31 @@
+{
+    "name": "Mainassem",
+    "rootNamespace": "",
+    "references": [
+        "GUID:92703082f92b41ba80f0d6912de66115",
+        "GUID:a9420e37d7990b54abdef6688edbe313",
+        "GUID:09dcc9c0126b6b34ab2a877b8f2277f5",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:b13a1d1dfb13f1b489a0ff5612f36f29",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21",
+        "GUID:7c04f0dfa9243c04681a55d90d3ff3fc",
+        "GUID:ec0144320e2ab8c42b9ce084651ff2a1",
+        "GUID:09e6844a19c44194dae71b5f6d5e2f12"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Firebase.App.dll",
+        "Firebase.Editor.dll",
+        "Firebase.Auth.dll",
+        "Firebase.Platform.dll",
+        "Firebase.TaskExtension.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
