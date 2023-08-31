@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Firebase.Auth; // This is required for AuthError enum
+using Firebase.Auth; 
 
 #if UNITY_EDITOR
 public class GeterrorTests
@@ -8,8 +8,6 @@ public class GeterrorTests
     public void GetErrorMessage_InvalidEmail_ReturnsCorrectMessage()
     {
         var message = NewBehaviourScript.GetErrorMessage(AuthError.InvalidEmail);
-        
-        // Updated the expected message based on NewBehaviourScript logic
         Assert.AreEqual("Your Email Invalid", message);
     }
 

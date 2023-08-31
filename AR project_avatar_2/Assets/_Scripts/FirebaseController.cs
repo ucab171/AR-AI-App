@@ -1,3 +1,4 @@
+//Reference: https://firebase.google.com/docs/auth/unity/start
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

@@ -10,14 +10,12 @@ using UnityEngine.XR.ARSubsystems;
 public interface IARPlaneManagerWrapper
 {
     ARPlane GetPlane(TrackableId trackableId);
-    // ... Add other methods or properties as needed.
 }
 
 public interface IARRaycastManagerWrapper
 {
     bool Raycast(Vector2 screenPosition, List<ARRaycastHit> hitResults, TrackableType trackableType);
 
-    // ... Add other methods as needed.
 }
 public class ARPlaneManagerWrapper : IARPlaneManagerWrapper
 {
@@ -32,7 +30,6 @@ public class ARPlaneManagerWrapper : IARPlaneManagerWrapper
     {
         return _planeManager.GetPlane(trackableId);
     }
-    // ... Implement other methods as needed.
 }
 
 public class ARRaycastManagerWrapper : IARRaycastManagerWrapper
@@ -48,8 +45,6 @@ public class ARRaycastManagerWrapper : IARRaycastManagerWrapper
 {
     return _raycastManager.Raycast(screenPosition, hitResults, trackableType);
 }
-
-    // ... Implement other methods as needed.
 }
 
 public class PlaceObjectTests
@@ -65,13 +60,10 @@ public class PlaceObjectTests
         var go = new GameObject();
         placeObject = go.AddComponent<PlaceObject>();
 
-        // Mock AR Managers
         mockRaycastManager = Substitute.For<IARRaycastManagerWrapper>();
         mockPlaneManager = Substitute.For<IARPlaneManagerWrapper>();
 
 
-        // Directly set the mocked fields in your PlaceObject component
-        // NOTE: You'll need to update these field names or properties in the PlaceObject class to make this work.
         typeof(PlaceObject).GetField("aRRaycastManagerWrapper", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(placeObject, mockRaycastManager);
         typeof(PlaceObject).GetField("aRPlaneManager", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).SetValue(placeObject, mockPlaneManager);
     }
@@ -95,12 +87,6 @@ public class PlaceObjectTests
             x[1] = mockList;
             return true;
         });
-
-        // Execute
-        // Simulate a FingerDown event somehow...
-
-        // Assert
-        // Check if the object was spawned, and if it has the correct position and rotation...
     }
 
     [TearDown]

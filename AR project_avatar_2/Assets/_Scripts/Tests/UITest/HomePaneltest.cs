@@ -14,8 +14,6 @@ public class HomePaneltest
     {
         GameObject go = new GameObject();
         _script = go.AddComponent<NewBehaviourScript>();
-
-        // Assuming the panels are public or have public getters in the NewBehaviourScript
         _script.loginPanel = new GameObject();
         _script.homePanel = new GameObject();
         _script.signupPanel = new GameObject();
