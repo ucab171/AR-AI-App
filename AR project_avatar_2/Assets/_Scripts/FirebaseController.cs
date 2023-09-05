@@ -1,12 +1,12 @@
 //Reference: https://firebase.google.com/docs/auth/unity/start
+using System;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Firebase;
 using Firebase.Auth;
-using System;
-using System.Threading.Tasks;
 using Firebase.Extensions;
 
 public class NewBehaviourScript : MonoBehaviour
@@ -228,34 +228,35 @@ public class NewBehaviourScript : MonoBehaviour
             }
         }
     }
- public static string GetErrorMessage(AuthError errorCode)
+
+public static string GetErrorMessage(AuthError errorCode)
     {
         var message = "";
         switch (errorCode)
         {
             case AuthError.AccountExistsWithDifferentCredentials:
-                message = "Account Not Exist";
-                break;
-            case AuthError.MissingPassword:
-                message = "Missing Password";
-                break;
-            case AuthError.WeakPassword:
-                message = "Password So Weak";
-                break;
-            case AuthError.WrongPassword:
-                message = "Wrong Password";
+                message = "This account does not exsit";
                 break;
             case AuthError.EmailAlreadyInUse:
-                message = "Your Email Already in Use";
+                message = "The email has already been registered";
                 break;
             case AuthError.InvalidEmail:
-                message = "Your Email Invalid";
+                message = "The email is invalid";
                 break;
             case AuthError.MissingEmail:
-                message = "Your Email Missing";
+                message = "Please input email";
+                break;
+            case AuthError.MissingPassword:
+                message = "Please input password";
+                break;
+            case AuthError.WeakPassword:
+                message = "Your password is too weak";
+                break;
+            case AuthError.WrongPassword:
+                message = "The password is wrong";
                 break;
             default:
-                message = "Invalid Error";
+                message = "Invalid error";
                 break;
         }
         return message;
